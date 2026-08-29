@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ledger — Add Courses</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="min-h-screen pb-24">
+
+  <main class="max-w-2xl mx-auto px-4 sm:px-8 py-8 space-y-8">
+
+    <div>
+      <h2 class="font-display text-2xl font-semibold">Add Courses</h2>
+      <p class="text-sm text-white/50 mt-1">Set up what you're taking this semester. Scores come later — head to Home and hit "Calculate CGPA" once results drop.</p>
+    </div>
+
+    <!-- Semester picker -->
+    <section class="paper-soft rounded-lg p-5">
+      <label class="block text-xs uppercase tracking-wide text-white/50 mb-2">Semester</label>
+      <div class="flex gap-2">
+        <select id="semester-select" class="flex-1 rounded px-3 py-2 text-sm">
+          <option value="">Select a semester…</option>
+        </select>
+        <button id="new-semester-toggle" class="btn-ghost rounded px-3 py-2 text-xs whitespace-nowrap">+ New</button>
+        <button id="delete-semester-btn" type="button" class="hidden rounded px-3 py-2 text-xs font-medium text-red-200 border border-red-300/40 hover:border-red-200 whitespace-nowrap">Delete</button>
+      </div>
+
+      <div id="new-semester-form" class="hidden mt-4">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-xs uppercase tracking-wide text-white/50">New semester</p>
+          <button id="close-new-semester-btn" type="button" class="text-xl leading-none text-white/60 hover:text-white" aria-label="Close new semester form">×</button>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs uppercase tracking-wide text-white/50 mb-1">Level</label>
+          <input type="text" id="sem-level" placeholder="100" class="w-full rounded px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wide text-white/50 mb-1">Session</label>
+          <input type="text" id="sem-session" placeholder="2025/2026" class="w-full rounded px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wide text-white/50 mb-1">Term</label>
+          <select id="sem-term" class="w-full rounded px-3 py-2 text-sm">
+            <option>First Semester</option>
+            <option>Second Semester</option>
+          </select>
+        </div>
+        <button id="save-semester-btn" class="btn-brass rounded px-4 py-2 text-xs sm:col-span-3">Create semester</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Add course form -->
+    <section id="course-section" class="paper-soft rounded-lg p-5 hidden">
+      <label class="block text-xs uppercase tracking-wide text-white/50 mb-2">Add a course</label>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <input type="text" id="course-title" placeholder="Course title" class="rounded px-3 py-2 text-sm col-span-2 sm:col-span-1" />
+        <input type="number" id="course-units" min="1" placeholder="Units" class="rounded px-3 py-2 text-sm" />
+        <button id="add-course-btn" class="btn-brass rounded px-3 py-2 text-sm">Add</button>
+      </div>
+
+      <div class="mt-5">
+        <p class="text-xs uppercase tracking-wide text-white/50 mb-2">Courses in this semester</p>
+        <ul id="course-list" class="space-y-2 text-sm"></ul>
+        <p id="course-empty" class="text-sm text-white/40 hidden">No courses added yet.</p>
+      </div>
+    </section>
+
+    <p id="pick-semester-hint" class="text-sm text-white/40">Select or create a semester above to start adding courses.</p>
+
+  </main>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+  if (!localStorage.getItem("token")) window.location.href = "/index.html";
+  renderNavbar("courses");
+</script>
+<script src="/js/courses.js"></script>
+</body>
+</html>

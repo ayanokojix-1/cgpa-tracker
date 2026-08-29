@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ledger — Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="min-h-screen pb-24">
+
+  <main class="max-w-3xl mx-auto px-4 sm:px-8 py-8 space-y-10">
+
+    <!-- Signature element: CGPA position gauge -->
+    <section class="paper-soft rounded-lg p-6">
+      <div class="flex items-baseline justify-between mb-1">
+        <p class="text-xs uppercase tracking-wide text-white/50">Cumulative GPA</p>
+        <p id="credits-completed" class="font-mono text-xs text-white/40"></p>
+      </div>
+      <div class="flex items-end gap-3 mb-5">
+        <span id="cgpa-value" class="font-display text-5xl font-semibold brass-text">—</span>
+        <span id="cgpa-classification" class="text-sm text-white/60 pb-1">No grades recorded yet</span>
+      </div>
+
+      <div class="relative h-3 rounded-full overflow-hidden flex" aria-hidden="true">
+        <div class="h-full" style="width: 30%; background: rgba(168,84,80,0.5);" title="Pass / Below Third"></div>
+        <div class="h-full" style="width: 17.8%; background: rgba(168,84,80,0.8);" title="Third Class"></div>
+        <div class="h-full" style="width: 21.8%; background: var(--brass); opacity: 0.55;" title="Second Class Lower"></div>
+        <div class="h-full" style="width: 19.8%; background: var(--brass); opacity: 0.8;" title="Second Class Upper"></div>
+        <div class="h-full" style="width: 10.6%; background: var(--sage);" title="First Class"></div>
+      </div>
+      <div id="cgpa-marker" class="relative" style="height: 0;">
+        <div class="absolute -top-1 w-0.5 h-5 bg-white rounded" style="left: 0%;"></div>
+      </div>
+      <div class="flex justify-between text-[10px] font-mono text-white/40 mt-1.5 mb-5">
+        <span>0</span><span>1.5</span><span>2.4</span><span>3.5</span><span>4.5</span><span>5.0</span>
+      </div>
+
+      <button id="open-calculate-btn" class="btn-brass rounded px-4 py-2 text-sm w-full sm:w-auto">Calculate CGPA</button>
+    </section>
+
+    <!-- Planner -->
+    <section class="paper rounded-lg p-6">
+      <h2 class="font-display text-lg font-semibold mb-1">The Petition</h2>
+      <p class="text-sm text-black/60 mb-4">State where you want to land, and the ledger tells you what it costs.</p>
+      <form id="planner-form" class="grid sm:grid-cols-3 gap-3 items-end">
+        <div>
+          <label class="block text-xs uppercase tracking-wide text-black/50 mb-1">Target CGPA</label>
+          <input type="number" step="0.01" min="0" max="5" id="planner-target" required placeholder="4.50" class="w-full rounded px-3 py-2 text-sm !bg-white/60 !text-[--ink-text] !border-black/20" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wide text-black/50 mb-1">Credits remaining</label>
+          <input type="number" min="1" id="planner-credits" required placeholder="30" class="w-full rounded px-3 py-2 text-sm !bg-white/60 !text-[--ink-text] !border-black/20" />
+          <p class="text-[11px] text-black/40 mt-1">Units left in your degree that you haven't done yet — e.g. remaining semesters × avg units per semester.</p>
+        </div>
+        <button type="submit" class="rounded py-2 text-sm font-semibold" style="background: var(--ink-navy); color: var(--parchment);">Calculate</button>
+      </form>
+      <div id="planner-result" class="mt-4 text-sm hidden"></div>
+    </section>
+
+    <!-- Semester summary (read-only overview, editing happens in the modal or Add Courses page) -->
+    <section>
+      <h2 class="font-display text-lg font-semibold mb-4">Semester Records</h2>
+      <div id="semester-summary" class="space-y-3"></div>
+      <p id="empty-state" class="text-sm text-white/40 hidden">No semesters yet. Head to "Add Courses" to start your ledger.</p>
+    </section>
+
+  </main>
+
+  <!-- Calculate CGPA modal -->
+  <div id="calc-modal" class="fixed inset-0 modal-backdrop hidden items-center justify-center p-4 z-50">
+    <div class="paper rounded-lg max-w-lg w-full max-h-[85vh] flex flex-col">
+      <div class="px-5 py-4 border-b border-black/10 flex items-center justify-between">
+        <h3 class="font-display text-lg font-semibold">Enter your scores</h3>
+        <button id="close-modal-btn" class="text-black/50 text-lg leading-none">✕</button>
+      </div>
+      <div id="modal-body" class="overflow-y-auto px-5 py-4 space-y-5 flex-1"></div>
+      <div class="px-5 py-4 border-t border-black/10 flex gap-2">
+        <button id="save-scores-btn" class="rounded px-4 py-2 text-sm font-semibold flex-1" style="background: var(--ink-navy); color: var(--parchment);">Save scores</button>
+        <button id="cancel-modal-btn" class="btn-ghost rounded px-4 py-2 text-sm" style="color: var(--ink-text); border-color: rgba(27,39,64,0.25);">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>renderNavbar("dashboard");</script>
+<script src="/js/app.js"></script>
+</body>
+</html>
